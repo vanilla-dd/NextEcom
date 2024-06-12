@@ -1,13 +1,11 @@
 import { SignIn } from "@/components/auth/signin-button";
-import UserAvatar from "@/components/userProfile";
+import { ModeToggle } from "@/components/theme/theme-toggle";
 
 export default function Home() {
   return (
-    <>
-      <main>
-        <UserAvatar />
-      </main>
+    <main>
+      <ModeToggle />
       <SignIn />
-    </>
+    </main>
   );
 }
