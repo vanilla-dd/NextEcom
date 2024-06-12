@@ -1,5 +1,12 @@
-import Image from "next/image";
+import { SignIn } from "@/components/sign-in";
+import UserAvatar from "@/components/userProfile";
 
 export default function Home() {
-  return <main></main>;
+  return (
+    <main>
+      <UserAvatar />
+      fsf
+      <SignIn />
+    </main>
+  );
 }
