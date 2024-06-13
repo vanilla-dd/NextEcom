@@ -75,7 +75,7 @@ async function Navbar() {
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
             <li className="flex h-5 items-center justify-center">
-              <LinkEffect link="/partner">Become a seller</LinkEffect>
+              <LinkEffect link="/sell">Become a seller</LinkEffect>
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
             <li>
