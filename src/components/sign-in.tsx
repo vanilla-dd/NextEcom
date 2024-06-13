@@ -1,4 +1,5 @@
 import { signIn } from "@/auth";
+import { Button } from "./ui/button";
 
 export function SignIn() {
   return (
@@ -11,16 +12,27 @@ export function SignIn() {
           redirectTo: "/",
         });
       }}
+      className="flex w-full flex-col gap-3"
     >
-      <label>
+      <label className="relative flex flex-col gap-1 font-semibold before:absolute before:bottom-10 before:left-11 before:text-red-600 before:content-['*']">
         Email
-        <input name="email" type="email" />
+        <input
+          name="email"
+          type="email"
+          required={true}
+          className="h-8 rounded-md border px-2 font-normal outline-2 outline-gray-400"
+        />
       </label>
-      <label>
+      <label className="before:hover:after:visited: relative flex flex-col gap-1 font-semibold before:absolute before:bottom-10 before:left-20 before:cursor-pointer before:text-red-600 before:content-['*']">
         Password
-        <input name="password" type="password" />
+        <input
+          name="password"
+          type="password"
+          required={true}
+          className="h-8 rounded-md border px-2 font-normal outline-2 outline-gray-400"
+        />
       </label>
-      <button>Sign In</button>
+      <Button>Sign In</Button>
     </form>
   );
 }
