@@ -3,21 +3,22 @@
 import { auth } from "@/auth";
 import Link from "next/link";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import { SignOut } from "./auth/signout-button";
+import { SignOut } from "../auth/signout-button";
+import LinkEffect from "./LinkEffect";
 
 async function Navbar() {
   const session = await auth();
   return (
     <header>
-      <nav>
-        <ul className="m-1 mx-1 flex items-center justify-between px-1 py-1">
+      <nav className="text-sm">
+        <ul className="flex items-center justify-between px-2 pt-1">
           <li>
             <Link href={"/"}>
               <svg
@@ -69,12 +70,12 @@ async function Navbar() {
             </Link>
           </li>
           <div className="flex items-center justify-center gap-2">
-            <li>
-              <Link href={"/buy"}>Marketplace</Link>
+            <li className="flex h-5 items-center justify-center">
+              <LinkEffect link="/buy">Marketplace</LinkEffect>
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
-            <li>
-              <Link href={"/partner"}>Become a seller</Link>
+            <li className="flex h-5 items-center justify-center">
+              <LinkEffect link="/partner">Become a seller</LinkEffect>
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
             <li>
@@ -105,7 +106,7 @@ async function Navbar() {
                   </PopoverContent>
                 </Popover>
               ) : (
-                <Button asChild>
+                <Button asChild className="h-auto px-3.5 py-2 text-sm">
                   <Link href={"/signin"}>Sign In</Link>
                 </Button>
               )}
