@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { object, string } from "zod";
+import { object, string, z } from "zod";
 
 export const signInSchema = object({
   email: string({ required_error: "Email is required" })
@@ -11,8 +11,6 @@ export const signInSchema = object({
     .max(32, "Password must be less than 32 characters"),
 });
 
-// File path: /utils/password.js
-
 const saltRounds = 10;
 
 export async function saltAndHashPassword(password: string) {
@@ -20,3 +18,51 @@ export async function saltAndHashPassword(password: string) {
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 }
+
+export const sellFormSchema = z.object({
+  productName: z.string().min(1, {
+    message: "Username must be at least 1 characters.",
+  }),
+  productImage: z.string().nullable(),
+  supportEmail: z
+    .string({ required_error: "Support Email can't be empty" })
+    .email({ message: "Enter a valid email" }),
+  productPitch: z
+    .string({ required_error: "Tell users bit about your product" })
+    .max(200, { message: "Shorter description makes better impression" }),
+  websiteURL: z.string({ required_error: "Webite URL is required" }).min(2),
+  producutCategory: z.enum([
+    "Development & IT",
+    "Operations",
+    "Marketing",
+    "Finance",
+  ]),
+  productTag: z.enum([
+    "Content marketing",
+    "CRM",
+    "Ecommerce",
+    "Email marketing",
+    "Ads",
+    "Lead capture",
+    "Lead generation",
+    "Sales enablement",
+    "Giveaways",
+    "Event management",
+    "Marketing automation",
+    "Marketing planning",
+    "Reputation management",
+    "Marketing dashboard",
+    "PR",
+    "Proposal management",
+    "Sales management",
+    "Sales dashboard",
+    "SEO",
+    "Link management",
+    "SMS communication",
+    "Social proof platform",
+    "Social media analytics",
+    "Social media management",
+    "Live streaming",
+    "Webinar tool",
+  ]),
+});

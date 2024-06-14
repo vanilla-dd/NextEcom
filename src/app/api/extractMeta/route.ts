@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
     const ogTitle = getMetaTagContent(html, "og:title");
     const ogImage = getMetaTagContent(html, "og:image");
     const ogDescription = getMetaTagContent(html, "og:description");
-
     return new Response(
       JSON.stringify({
         headContent,

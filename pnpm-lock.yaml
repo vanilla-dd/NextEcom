@@ -39,8 +39,8 @@ dependencies:
     specifier: ^0.31.2
     version: 0.31.2(@neondatabase/serverless@0.9.3)(@types/react@18.3.3)(react@18.3.1)
   embla-carousel-react:
-    specifier: ^8.1.4
-    version: 8.1.4(react@18.3.1)
+    specifier: ^8.1.5
+    version: 8.1.5(react@18.3.1)
   framer-motion:
     specifier: ^11.2.10
     version: 11.2.10(react-dom@18.3.1)(react@18.3.1)
@@ -60,10 +60,10 @@ dependencies:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
   react:
-    specifier: ^18
+    specifier: ^18.3.1
     version: 18.3.1
   react-dom:
-    specifier: ^18
+    specifier: ^18.3.1
     version: 18.3.1(react@18.3.1)
   react-hook-form:
     specifier: ^7.51.5
@@ -89,19 +89,19 @@ devDependencies:
     specifier: ^2.4.6
     version: 2.4.6
   '@types/node':
-    specifier: ^20
+    specifier: ^20.14.2
     version: 20.14.2
   '@types/react':
-    specifier: ^18
+    specifier: ^18.3.3
     version: 18.3.3
   '@types/react-dom':
-    specifier: ^18
+    specifier: ^18.3.0
     version: 18.3.0
   drizzle-kit:
     specifier: ^0.22.7
     version: 0.22.7
   eslint:
-    specifier: ^8
+    specifier: ^8.57.0
     version: 8.57.0
   eslint-config-next:
     specifier: 14.2.3
@@ -113,19 +113,19 @@ devDependencies:
     specifier: ^5.1.3
     version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.2)
   postcss:
-    specifier: ^8
+    specifier: ^8.4.38
     version: 8.4.38
   prettier:
     specifier: ^3.3.2
     version: 3.3.2
   prettier-plugin-tailwindcss:
-    specifier: ^0.6.3
-    version: 0.6.3(prettier@3.3.2)
+    specifier: ^0.6.4
+    version: 0.6.4(prettier@3.3.2)
   tailwindcss:
-    specifier: ^3.4.1
+    specifier: ^3.4.4
     version: 3.4.4
   typescript:
-    specifier: ^5
+    specifier: ^5.4.5
     version: 5.4.5
 
 packages:
@@ -1498,16 +1498,16 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
-  /acorn-jsx@5.3.2(acorn@8.11.3):
+  /acorn-jsx@5.3.2(acorn@8.12.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.0
     dev: true
 
-  /acorn@8.11.3:
-    resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
+  /acorn@8.12.0:
+    resolution: {integrity: sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -1771,8 +1771,8 @@ packages:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
 
-  /caniuse-lite@1.0.30001632:
-    resolution: {integrity: sha512-udx3o7yHJfUxMLkGohMlVHCvFvWmirKh9JAH/d7WOLPetlH+LTL5cocMZ0t7oZx/mdlOWXti97xLZWc8uURRHg==}
+  /caniuse-lite@1.0.30001634:
+    resolution: {integrity: sha512-fbBYXQ9q3+yp1q1gBk86tOFs4pyn/yxFm5ZNP18OXJDfA3txImOY9PhfxVggZ4vRHDqoU8NrKU81eN0OtzOgRA==}
     dev: false
 
   /chalk@4.1.2:
@@ -2072,26 +2072,26 @@ packages:
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  /embla-carousel-react@8.1.4(react@18.3.1):
-    resolution: {integrity: sha512-0llfX4HlXrdgJKxlZ8q8LyI6EV+TvOI7KtZx9GkDTwdgP6/AyyuvzO8KYvDUNZOnbFBAPbVEe2qEgGMLEinlYw==}
+  /embla-carousel-react@8.1.5(react@18.3.1):
+    resolution: {integrity: sha512-xFmfxgJd7mpWDHQ4iyK1Qs+5BTTwu4bkn+mSROKiUH9nKpPHTeilQ+rpeQDCHRrAPeshD67aBk0/p6FxWxXsng==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.1 || ^18.0.0
     dependencies:
-      embla-carousel: 8.1.4
-      embla-carousel-reactive-utils: 8.1.4(embla-carousel@8.1.4)
+      embla-carousel: 8.1.5
+      embla-carousel-reactive-utils: 8.1.5(embla-carousel@8.1.5)
       react: 18.3.1
     dev: false
 
-  /embla-carousel-reactive-utils@8.1.4(embla-carousel@8.1.4):
-    resolution: {integrity: sha512-qkovXTiNaURsnYhJxUBsDx9YV6crxLIZwfO6jIFSKKn6ZZE1JVeZAvy/UsiyNxiFikVrO76iquvD6uBHI9YD8w==}
+  /embla-carousel-reactive-utils@8.1.5(embla-carousel@8.1.5):
+    resolution: {integrity: sha512-76uZTrSaEGGta+qpiGkMFlLK0I7N04TdjZ2obrBhyggYIFDWlxk1CriIEmt2lisLNsa1IYXM85kr863JoCMSyg==}
     peerDependencies:
-      embla-carousel: 8.1.4
+      embla-carousel: 8.1.5
     dependencies:
-      embla-carousel: 8.1.4
+      embla-carousel: 8.1.5
     dev: false
 
-  /embla-carousel@8.1.4:
-    resolution: {integrity: sha512-AMe40ZpyLpztfNnGQtMWVIgYdcBoY2MuQttRwQ/xqSPC3UvDG2QF17CR5Efz4c8qEkno7pxdZFDRO2R11y6hRQ==}
+  /embla-carousel@8.1.5:
+    resolution: {integrity: sha512-R6xTf7cNdR2UTNM6/yUPZlJFRmZSogMiRjJ5vXHO65II5MoUlrVYUAP0fHQei/py82Vf15lj+WI+QdhnzBxA2g==}
     dev: false
 
   /emoji-regex@8.0.0:
@@ -2578,8 +2578,8 @@ packages:
     resolution: {integrity: sha512-oruZaFkjorTpF32kDSI5/75ViwGeZginGGy2NoOSg3Q9bnwlnmDm4HLnkl0RE3n+njDXR037aY1+x58Z/zFdwQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      acorn: 8.11.3
-      acorn-jsx: 5.3.2(acorn@8.11.3)
+      acorn: 8.12.0
+      acorn-jsx: 5.3.2(acorn@8.12.0)
       eslint-visitor-keys: 3.4.3
     dev: true
 
@@ -3391,7 +3391,7 @@ packages:
       '@next/env': 14.2.3
       '@swc/helpers': 0.5.5
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001632
+      caniuse-lite: 1.0.30001634
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.3.1
@@ -3737,8 +3737,8 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier-plugin-tailwindcss@0.6.3(prettier@3.3.2):
-    resolution: {integrity: sha512-GeJ9bqXN4APAP0V5T2a1J/o6a50MWevEUCPWxijpdXFDQkBCoAfz4pQfv+YMXSqZ5GXLMDYio0mUOfrYL7gf4w==}
+  /prettier-plugin-tailwindcss@0.6.4(prettier@3.3.2):
+    resolution: {integrity: sha512-3vhbIvlKyAWPaw9bUr2cw6M1BGx2Oy9CCLJyv+nxEiBGCTcL69WcAz2IFMGqx8IXSzQCInGSo2ujAByg9poHLQ==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
