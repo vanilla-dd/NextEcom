@@ -17,7 +17,7 @@ export default function RootLayout({
     // <html lang="en" suppressHydrationWarning>
     //   <body>
     //     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <main className="flex flex-col gap-10 sm:px-2 md:px-3 lg:px-4">
+    <main className="flex flex-col gap-12 sm:px-2 md:px-3 lg:px-4">
       <Navbar />
       {children}
     </main>

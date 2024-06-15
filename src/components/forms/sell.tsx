@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { sellFormSchema } from "@/lib/helpers";
+import { createSellerAcc } from "@/server/actions/createProduct";
 
 export function SellForm() {
   const form = useForm<z.infer<typeof sellFormSchema>>({
@@ -26,14 +27,15 @@ export function SellForm() {
       productImage: "",
       productPitch: "",
       websiteURL: "",
+      productTag: "none",
+      producutCategory: "none",
     },
     mode: "onChange",
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof sellFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof sellFormSchema>) {
+    await createSellerAcc(values);
     console.log(values);
   }
 
@@ -138,7 +140,6 @@ export function SellForm() {
               </FormItem>
             )}
           />
-
           <Button type="submit">Submit</Button>
         </form>
       </Form>

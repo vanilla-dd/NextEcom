@@ -36,6 +36,7 @@ export const sellFormSchema = z.object({
     "Operations",
     "Marketing",
     "Finance",
+    "none",
   ]),
   productTag: z.enum([
     "Content marketing",
@@ -64,5 +65,6 @@ export const sellFormSchema = z.object({
     "Social media management",
     "Live streaming",
     "Webinar tool",
+    "none",
   ]),
 });

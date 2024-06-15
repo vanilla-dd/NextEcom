@@ -1,3 +1,4 @@
+"use server";
 import { db } from "../db";
 
 export async function getUserFromDb(email: string, pwHash: string) {

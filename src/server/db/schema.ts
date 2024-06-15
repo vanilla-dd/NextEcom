@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
-export const RoleEnum = pgEnum("roles", ["user", "admin"]);
+export const RoleEnum = pgEnum("roles", ["user", "seller"]);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -67,3 +67,18 @@ export const verificationTokens = pgTable(
     }),
   }),
 );
+
+export const productDetails = pgTable("productDetails", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  productTitle: text("productTitle").notNull().unique(),
+  productDescription: text("productDescription").notNull(),
+  productURL: text("productURL").notNull(),
+  productImgURL: text("productImgURL"),
+  productSupportEmail: text("productSupportEmail").notNull(),
+  userId: text("userId")
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: "cascade" }),
+});

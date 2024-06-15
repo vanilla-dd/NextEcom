@@ -12,9 +12,11 @@ import {
 import Image from "next/image";
 import { SignOut } from "../auth/signout-button";
 import LinkEffect from "./LinkEffect";
+import { getIsSeller } from "@/server/actions/isSeller";
 
 async function Navbar() {
   const session = await auth();
+  const isSeller = await getIsSeller();
   return (
     <header>
       <nav className="text-sm">
@@ -75,7 +77,13 @@ async function Navbar() {
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
             <li className="flex h-5 items-center justify-center">
-              <LinkEffect link="/sell">Become a seller</LinkEffect>
+              {isSeller ? (
+                <LinkEffect link="/seller/dashboard">
+                  Seller Dashboard
+                </LinkEffect>
+              ) : (
+                <LinkEffect link="/seller">Become a seller</LinkEffect>
+              )}
             </li>
             <hr className="h-4 w-[1px] bg-gray-400" />
             <li>
