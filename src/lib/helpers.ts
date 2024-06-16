@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
-import { object, string, z } from "zod";
+import { string, z } from "zod";
 
-export const signInSchema = object({
+export const signInSchema = z.object({
   email: string({ required_error: "Email is required" })
     .min(1, "Email is required")
     .email("Invalid email"),
@@ -18,6 +18,15 @@ export async function saltAndHashPassword(password: string) {
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 }
+
+export const createProductSchmea = z.object({
+  name: z.string(),
+  priceId: z.string(),
+  defaultPrice: z.string(),
+  description: z.string(),
+  createdAt: z.date().nullable(),
+  imgURL: z.string().nullable(),
+});
 
 export const sellFormSchema = z.object({
   productName: z.string().min(1, {
@@ -68,3 +77,7 @@ export const sellFormSchema = z.object({
     "none",
   ]),
 });
+
+export function accountLink() {
+  return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.STRIPE_CLIENT_ID}&scope=read_write&redirect_uri=http://localhost:3000/seller/dashboard`;
+}

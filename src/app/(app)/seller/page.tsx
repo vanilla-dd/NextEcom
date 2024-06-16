@@ -8,7 +8,6 @@ async function page() {
   const session = await auth();
   if (!session) redirect("/signup");
   const isSeller = await getIsSeller();
-  console.log(isSeller, session);
   if (isSeller) redirect("/seller/dashboard");
   return (
     <div>

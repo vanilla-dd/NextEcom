@@ -8,11 +8,23 @@ import { db } from "./server/db";
 import { users } from "./server/db/schema";
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
+import { stripe } from "./server/stripe";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.AUTH_SECRET,
   trustHost: true,
+  events: {
+    createUser: async ({ user }) => {
+      const stripeAcc = await stripe.customers.create({
+        email: user.email!,
+      });
+      await db
+        .update(users)
+        .set({ stripeId: stripeAcc.id })
+        .where(eq(users.id, user.id!));
+    },
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,

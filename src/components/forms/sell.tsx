@@ -36,7 +36,6 @@ export function SellForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof sellFormSchema>) {
     await createSellerAcc(values);
-    console.log(values);
   }
 
   const [image, setImage] = useState("");

@@ -20,6 +20,8 @@ export const users = pgTable("user", {
   image: text("image"),
   password: text("password"),
   role: RoleEnum("roles").default("user"),
+  stripeId: text("stripeId").unique(),
+  connectId: text("connectId"),
 });
 
 export const accounts = pgTable(
@@ -81,4 +83,19 @@ export const productDetails = pgTable("productDetails", {
     .notNull()
     .unique()
     .references(() => users.id, { onDelete: "cascade" }),
+});
+
+export const productStripeDetail = pgTable("productStripeDetail", {
+  id: text("id")
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
+  productStripeName: text("productStripeName"),
+  productStripeId: text("productStripeId").notNull(),
+  productStripeDescription: text("productStripeDescription").notNull(),
+  prodcutDefaultPrice: text("productDefaultPrice").notNull(),
+  createdAt: text("createdAt"),
+  productStripeImgURL: text("productStripeImgURL"),
+  productDetailsId: text("productDetailsId")
+    .notNull()
+    .references(() => productDetails.id),
 });
