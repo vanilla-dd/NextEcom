@@ -5,6 +5,7 @@ import { stripe } from "../stripe";
 import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { db } from "../db";
+import { redirect } from "next/navigation";
 
 export const getAccountProducts = async (stripeAccount: string) => {
   try {
@@ -64,4 +65,23 @@ export async function createCheckoutSession(
     },
   );
   return stripeSession.url;
+}
+
+export async function linkAccount(code: string) {
+  const session = await auth();
+  try {
+    const response = await stripe.oauth.token({
+      grant_type: "authorization_code",
+      code: code,
+    });
+
+    await db
+      .update(users)
+      .set({ connectId: response.stripe_user_id })
+      .where(eq(users.id, session?.user?.id!));
+
+    // Redirect to dashboard after successful OAuth
+  } catch (e) {
+    console.error("OAuth token exchange error:", e);
+  }
 }
