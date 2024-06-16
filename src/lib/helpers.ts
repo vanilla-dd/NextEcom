@@ -79,5 +79,5 @@ export const sellFormSchema = z.object({
 });
 
 export function accountLink() {
-  return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.STRIPE_CLIENT_ID}&scope=read_write&redirect_uri=http://localhost:3000/seller/dashboard`;
+  return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.STRIPE_CLIENT_ID}&scope=read_write&redirect_uri=${process.env.BASE_URL}/seller/dashboard`;
 }

@@ -41,6 +41,10 @@ interface DrawerDialogProps {
   product: Stripe.Product; // Assuming Stripe.Product type
 }
 
+interface ProfileFormProps {
+  product: Stripe.Product;
+}
+
 export default function DrawerDialogDemo({
   open,
   setOpen,
@@ -96,7 +100,7 @@ export default function DrawerDialogDemo({
   );
 }
 
-function ProfileForm(product: Stripe.Product) {
+function ProfileForm({ product }: ProfileFormProps) {
   console.log(product);
   const form = useForm<z.infer<typeof createProductSchmea>>({
     resolver: zodResolver(createProductSchmea),
