@@ -1,10 +1,8 @@
 import { auth } from "@/auth";
-import ShowProducts from "@/components/connect/ShowProducts";
-import ConnectStripe from "@/components/nav/ConnectStripe";
-import {
-  fetchConnectedAccountProducts,
-  linkAccount,
-} from "@/server/actions/getStripeAccProducts";
+import ConnectStripe from "@/components/connect/ConnectStripe";
+import ShowProducts from "@/components/connect/product/ShowProducts";
+import { fetchConnectedAccountProducts } from "@/server/actions/stripe/getStripeAccProducts";
+import { linkAccount } from "@/server/actions/stripe/linkAccount";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -23,7 +21,7 @@ async function page({ searchParams }: { searchParams: { code?: string } }) {
   const products = await fetchConnectedAccountProducts();
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <ConnectStripe />
       <ShowProducts products={products} />
     </div>
