@@ -10,7 +10,7 @@ export default function ShowProducts({
   console.log(products);
 
   return (
-    <div className="flex flex-wrap gap-2 gap-y-6">
+    <div className="grid gap-2 gap-y-6 sm:grid-cols-3">
       {products.map((product) => (
         <div key={product.id} className="rounded-md border-2 px-4 py-2">
           <ProductCard product={product} />

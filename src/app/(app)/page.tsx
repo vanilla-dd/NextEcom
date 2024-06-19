@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center gap-6">
       <div className="text-center">
-        <h1 className="max-w-[22ch] text-3xl font-semibold md:text-4xl lg:text-5xl xl:text-7xl">
+        <h1 className="max-w-[20ch] text-3xl font-semibold md:text-4xl lg:text-5xl xl:text-7xl">
           The only SaaS marketplace you&apos;ll ever
           <FlipWords words={words} className="text-purple-500" />
         </h1>

@@ -271,3 +271,106 @@ export const getFormattedCurr = (
   });
   return formatter.format(amount);
 };
+
+// Dashboard Sidebar
+
+import {
+  File,
+  Users,
+  Settings,
+  LineChart,
+  SquareGanttChart,
+  LayoutGrid,
+} from "lucide-react";
+
+type Submenu = {
+  href: string;
+  label: string;
+  active: boolean;
+};
+
+type Menu = {
+  href: string;
+  label: string;
+  active: boolean;
+  icon: any;
+  submenus: Submenu[];
+};
+
+type Group = {
+  groupLabel: string;
+  menus: Menu[];
+};
+
+export function getMenuList(pathname: string): Group[] {
+  return [
+    {
+      groupLabel: "",
+      menus: [
+        {
+          href: "/seller/dashboard",
+          label: "Dashboard",
+          active: pathname.endsWith("/seller/dashboard"),
+          icon: LayoutGrid,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Product",
+      menus: [
+        {
+          href: "/seller/dashboard/products",
+          label: "See Product",
+          active: pathname.includes("/dashboard/products"),
+          icon: SquareGanttChart,
+          submenus: [
+            {
+              href: "/seller/dashboard/products",
+              label: "All Products",
+              active: pathname === "/seller/dashboard/products",
+            },
+            {
+              href: "/seller/dashboard/products/manage",
+              label: "Manage Products",
+              active: pathname === "/seller/dashboard/products/manage",
+            },
+          ],
+        },
+        {
+          href: "/seller/dashboard/analytic",
+          label: "Analytic",
+          active: pathname.includes("/seller/dashboard/analytic"),
+          icon: LineChart,
+          submenus: [],
+        },
+        {
+          href: "/seller/dashboard/users",
+          label: "Users",
+          active: pathname.includes("/seller/dashboard/users"),
+          icon: Users,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Settings",
+      menus: [
+        {
+          href: "/seller/dashboard/docs",
+          label: "Docs",
+          active: pathname.includes("/seller/dashboard/docs"),
+          icon: File,
+          submenus: [],
+        },
+        {
+          href: "/seller/dashboard/account",
+          label: "Account",
+          active: pathname.includes("/seller/dashboard/account"),
+          icon: Settings,
+          submenus: [],
+        },
+      ],
+    },
+  ];
+}

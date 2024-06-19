@@ -17,9 +17,11 @@ export default function RootLayout({
     // <html lang="en" suppressHydrationWarning>
     //   <body>
     //     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <main className="flex flex-col gap-12 sm:px-2 md:px-3 lg:px-4">
-      <Navbar />
-      {children}
+    <main className="flex flex-col gap-12">
+      <header className="sticky top-0 z-[999] bg-white">
+        <Navbar />
+      </header>
+      <div className="sm:px-2 md:px-3 lg:px-4">{children}</div>
     </main>
     // </ThemeProvider>
     // </body>

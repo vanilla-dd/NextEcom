@@ -20,9 +20,9 @@ function ProductCard({ product }: { product: ProductWithDefaultPrice }) {
           width={100}
           height={100}
         />
-        <div className="max-w-[40ch]">
+        <div className="max-w-[40ch] break-words break-all">
           <h3>{product.name}</h3>
-          <p> {product.description}</p>
+          <p>{product.description}</p>
           <p>
             {getFormattedCurr(
               product.default_price?.currency.toUpperCase(),

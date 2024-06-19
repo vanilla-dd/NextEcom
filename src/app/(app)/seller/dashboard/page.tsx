@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import ConnectStripe from "@/components/connect/ConnectStripe";
 import ShowProducts from "@/components/connect/product/ShowProducts";
+import { ContentLayout } from "@/components/dashboard/content-layout";
 import { fetchConnectedAccountProducts } from "@/server/actions/stripe/getStripeAccProducts";
 import { linkAccount } from "@/server/actions/stripe/linkAccount";
 import { redirect } from "next/navigation";
@@ -21,10 +22,12 @@ async function page({ searchParams }: { searchParams: { code?: string } }) {
   const products = await fetchConnectedAccountProducts();
 
   return (
-    <div className="flex flex-col gap-4">
-      <ConnectStripe />
-      <ShowProducts products={products} />
-    </div>
+    <ContentLayout title={"Dashboard"}>
+      <div className="flex flex-col gap-4">
+        <ConnectStripe />
+        <ShowProducts products={products} />
+      </div>
+    </ContentLayout>
   );
 }
 
