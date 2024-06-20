@@ -83,6 +83,7 @@ export const createProductSchema = z.object({
   productFeatures: z
     .array(z.object({ value: z.string() }).optional())
     .min(1, { message: "At least one feature is needed" }),
+  redeemCodeUrl: z.string().url().optional(),
 });
 
 export function accountLink() {
@@ -371,3 +372,14 @@ export function getMenuList(pathname: string): Group[] {
     },
   ];
 }
+
+// uploadthng
+import {
+  generateUploadButton,
+  generateUploadDropzone,
+} from "@uploadthing/react";
+
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
+
+export const UploadButton = generateUploadButton<OurFileRouter>();
+export const UploadDropzone = generateUploadDropzone<OurFileRouter>();

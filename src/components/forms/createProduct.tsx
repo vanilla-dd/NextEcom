@@ -18,10 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductSchema } from "@/lib/helpers";
 import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
 import { cn } from "@/lib/utils";
+import FileUploader from "./file-uploader";
 
 function CreateProduct() {
   const { setStep, getStep } = useCurrentFromStep();
-  const [imgURL, setImgURL] = useState("");
+  const [codeFileName, setCodeFileName] = useState("");
 
   const form = useForm<z.infer<typeof createProductSchema>>({
     resolver: zodResolver(createProductSchema),
@@ -36,6 +37,7 @@ function CreateProduct() {
       planType: "one",
       productFeatures: [{ value: "" }],
       productType: "redeem",
+      redeemCodeUrl: "",
     },
     mode: "all",
   });
@@ -45,12 +47,17 @@ function CreateProduct() {
     name: "productFeatures",
   });
 
-  // 2. Define a submit handler.
+  // Define a submit handler.
   function onSubmit(values: z.infer<typeof createProductSchema>) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    // await createProduct(values);
     console.log(values);
   }
+
+  const handleFileUpload = (uploadedUrl: string, fileName: string) => {
+    form.setValue("redeemCodeUrl", uploadedUrl);
+    setCodeFileName(fileName);
+  };
 
   return (
     <Form {...form}>
@@ -82,8 +89,6 @@ function CreateProduct() {
                         }
 
                         const data = await response.json();
-
-                        setImgURL(data.ogImage);
 
                         form.setValue("productFeaturedImage", data.ogImage);
                         form.setValue("productName", data.ogTitle);
@@ -202,6 +207,43 @@ function CreateProduct() {
                 Add Feature
               </Button>
             </div>
+            <FormField
+              control={form.control}
+              name="redeemCodeUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Upload redeem codes (.csv file)
+                  </FormLabel>
+                  <FormControl>
+                    <>
+                      <Input
+                        hidden
+                        disabled
+                        className="invisible hidden opacity-0"
+                        placeholder="help.sprout@gmail.com"
+                        {...field}
+                      />
+                      {form.getValues("redeemCodeUrl") ? (
+                        <div>
+                          <p>{codeFileName}</p>
+                          <Button
+                            onClick={() => {
+                              form.setValue("redeemCodeUrl", "");
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <FileUploader onUpload={handleFileUpload} />
+                      )}
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </>
         )}
         <div className="flex justify-between">
@@ -220,7 +262,6 @@ function CreateProduct() {
                 return;
               }
               setStep(0);
-              console.log(getStep());
             }}
             type="button"
           >
