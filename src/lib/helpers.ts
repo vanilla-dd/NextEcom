@@ -1,6 +1,14 @@
 import bcrypt from "bcryptjs";
 import Stripe from "stripe";
 import { string, z } from "zod";
+import {
+  File,
+  Users,
+  Settings,
+  LineChart,
+  SquareGanttChart,
+  LayoutGrid,
+} from "lucide-react";
 
 export const signInSchema = z.object({
   email: string({ required_error: "Email is required" })
@@ -20,63 +28,61 @@ export async function saltAndHashPassword(password: string) {
   return hashedPassword;
 }
 
-export const createProductSchmea = z.object({
-  name: z.string(),
-  priceId: z.string(),
-  defaultPrice: z.string(),
-  description: z.string(),
-  createdAt: z.date().nullable(),
-  imgURL: z.string().nullable(),
-});
-
-export const sellFormSchema = z.object({
+export const createProductSchema = z.object({
   productName: z.string().min(1, {
-    message: "Username must be at least 1 characters.",
+    message: "Product name can't be empty.",
   }),
-  productImage: z.string().nullable(),
+  productFeaturedImage: z.string().nullable(),
   supportEmail: z
-    .string({ required_error: "Support Email can't be empty" })
-    .email({ message: "Enter a valid email" }),
+    .string({ required_error: "Support Email can't be empty." })
+    .email({ message: "Enter a valid email." }),
   productPitch: z
-    .string({ required_error: "Tell users bit about your product" })
-    .max(200, { message: "Shorter description makes better impression" }),
-  websiteURL: z.string({ required_error: "Webite URL is required" }).min(2),
-  producutCategory: z.enum([
-    "Development & IT",
-    "Operations",
-    "Marketing",
-    "Finance",
-    "none",
-  ]),
-  productTag: z.enum([
-    "Content marketing",
-    "CRM",
-    "Ecommerce",
-    "Email marketing",
-    "Ads",
-    "Lead capture",
-    "Lead generation",
-    "Sales enablement",
-    "Giveaways",
-    "Event management",
-    "Marketing automation",
-    "Marketing planning",
-    "Reputation management",
-    "Marketing dashboard",
-    "PR",
-    "Proposal management",
-    "Sales management",
-    "Sales dashboard",
-    "SEO",
-    "Link management",
-    "SMS communication",
-    "Social proof platform",
-    "Social media analytics",
-    "Social media management",
-    "Live streaming",
-    "Webinar tool",
-    "none",
-  ]),
+    .string({ required_error: "Tell users bit about your product." })
+    .min(10, { message: "Description should be at least 10 character long" })
+    .max(200, { message: "Shorter description makes better impression.s" }),
+  websiteURL: z
+    .string({ required_error: "Webite URL is required." })
+    .min(2)
+    .url({ message: "Enter a valid URL." }),
+  producutCategory: z
+    .enum(["Development & IT", "Operations", "Marketing", "Finance", "none"])
+    .nullable(),
+  productTag: z
+    .enum([
+      "Content marketing",
+      "CRM",
+      "Ecommerce",
+      "Email marketing",
+      "Ads",
+      "Lead capture",
+      "Lead generation",
+      "Sales enablement",
+      "Giveaways",
+      "Event management",
+      "Marketing automation",
+      "Marketing planning",
+      "Reputation management",
+      "Marketing dashboard",
+      "PR",
+      "Proposal management",
+      "Sales management",
+      "Sales dashboard",
+      "SEO",
+      "Link management",
+      "SMS communication",
+      "Social proof platform",
+      "Social media analytics",
+      "Social media management",
+      "Live streaming",
+      "Webinar tool",
+      "none",
+    ])
+    .nullable(),
+  planType: z.enum(["one", "multiple"]).default("one"),
+  productType: z.enum(["redeem", "license", "download"]),
+  productFeatures: z
+    .array(z.object({ value: z.string() }).optional())
+    .min(1, { message: "At least one feature is needed" }),
 });
 
 export function accountLink() {
@@ -273,15 +279,6 @@ export const getFormattedCurr = (
 };
 
 // Dashboard Sidebar
-
-import {
-  File,
-  Users,
-  Settings,
-  LineChart,
-  SquareGanttChart,
-  LayoutGrid,
-} from "lucide-react";
 
 type Submenu = {
   href: string;

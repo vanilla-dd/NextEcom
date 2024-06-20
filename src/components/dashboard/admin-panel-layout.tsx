@@ -20,7 +20,7 @@ export default function AdminPanelLayout({
       <Sidebar />
       <main
         className={cn(
-          "bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900",
+          "min-h-[calc(100dvh-3.25rem)] bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900",
           sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72",
         )}
       >
@@ -32,7 +32,7 @@ export default function AdminPanelLayout({
           sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72",
         )}
       >
-        <Footer />
+        {/* <Footer /> */}
       </footer>
     </>
   );

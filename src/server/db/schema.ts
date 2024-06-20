@@ -97,5 +97,5 @@ export const productStripeDetail = pgTable("productStripeDetail", {
   productStripeImgURL: text("productStripeImgURL"),
   productDetailsId: text("productDetailsId")
     .notNull()
-    .references(() => productDetails.id),
+    .references(() => productDetails.id, { onDelete: "cascade" }),
 });

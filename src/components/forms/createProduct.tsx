@@ -1,4 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,137 +14,230 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createProductSchmea } from "@/lib/helpers";
-import Stripe from "stripe";
+import { createProductSchema } from "@/lib/helpers";
+import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
+import { cn } from "@/lib/utils";
 
-interface DrawerDialogProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  product: Stripe.Product; // Assuming Stripe.Product type
-}
+function CreateProduct() {
+  const { setStep, getStep } = useCurrentFromStep();
+  const [imgURL, setImgURL] = useState("");
 
-interface ProfileFormProps {
-  product: Stripe.Product;
-}
-
-export default function DrawerDialogDemo({
-  open,
-  setOpen,
-  product,
-}: DrawerDialogProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
-  });
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline">Edit Profile</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
-          <ProfileForm product={product} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DrawerDescription>
-        </DrawerHeader>
-        <ProfileForm product={product} />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-function ProfileForm({ product }: ProfileFormProps) {
-  console.log(product);
-  const form = useForm<z.infer<typeof createProductSchmea>>({
-    resolver: zodResolver(createProductSchmea),
+  const form = useForm<z.infer<typeof createProductSchema>>({
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
-      createdAt: new Date(),
-      defaultPrice: "",
-      description: "",
-      imgURL: "",
-      name: "",
-      priceId: "",
+      productFeaturedImage: "",
+      productName: "",
+      productPitch: "",
+      productTag: "none",
+      producutCategory: "none",
+      supportEmail: "",
+      websiteURL: "",
+      planType: "one",
+      productFeatures: [{ value: "" }],
+      productType: "redeem",
     },
+    mode: "all",
   });
 
-  function onSubmit(values: z.infer<typeof createProductSchmea>) {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "productFeatures",
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof createProductSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>name</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+        {getStep() === 0 ? (
+          <>
+            <FormField
+              control={form.control}
+              name="websiteURL"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="before:content-['We'll try to fill the details based on the URL'] relative text-base font-semibold before:absolute before:top-0">
+                    Product URL
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      onInput={async (e) => {
+                        if (e.currentTarget.value === "") return;
+                        const response = await fetch("/api/extractMeta", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({ url: e.currentTarget.value }),
+                        });
+
+                        if (!response.ok) {
+                          throw new Error("Failed to fetch data");
+                        }
+
+                        const data = await response.json();
+
+                        setImgURL(data.ogImage);
+
+                        form.setValue("productFeaturedImage", data.ogImage);
+                        form.setValue("productName", data.ogTitle);
+                        form.setValue("productPitch", data.ogDescription);
+                      }}
+                      placeholder="https://sprout.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>This is your product URL.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="productName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Product Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Sprout" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display project name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="productPitch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Grab users attention
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Tell us bit about you're project"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display project description.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="supportEmail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Support Email
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="help.sprout@gmail.com" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your product support Email.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : (
+          <>
+            {/* Step two */}
+            {fields.map((item, index) => (
+              <FormField
+                key={item.id}
+                control={form.control}
+                name={`productFeatures.${index}.value`}
+                render={({ field }) => (
+                  <FormItem className={cn(index !== 0 && "!mt-0")}>
+                    <FormLabel
+                      className={cn(
+                        index !== 0 && "sr-only",
+                        "text-base font-semibold",
+                      )}
+                    >
+                      Tell us about the product features.
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex space-x-2">
+                        <Input
+                          {...field}
+                          placeholder={`Feature ${index + 1}`}
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => remove(index)}
+                          disabled={index === 0}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Describe feature {index + 1}.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <div className="!mt-0 flex items-center justify-end">
+              <Button type="button" onClick={() => append({ value: "" })}>
+                Add Feature
+              </Button>
+            </div>
+          </>
+        )}
+        <div className="flex justify-between">
+          <Button
+            onClick={async () => {
+              if (getStep() === 0) {
+                const validFrom = await form.trigger([
+                  "productFeaturedImage",
+                  "productName",
+                  "productPitch",
+                  "supportEmail",
+                  "websiteURL",
+                ]);
+                if (!validFrom) return;
+                setStep(1);
+                return;
+              }
+              setStep(0);
+              console.log(getStep());
+            }}
+            type="button"
+          >
+            {getStep() === 0 ? "Next Step" : "Previous Step"}
+          </Button>
+          <Button
+            type="submit"
+            className={cn(
+              getStep() === 1 ? "visible opacity-100" : "invisible opacity-0",
+            )}
+          >
+            Submit
+          </Button>
+        </div>
       </form>
     </Form>
   );
 }
+
+export default CreateProduct;
