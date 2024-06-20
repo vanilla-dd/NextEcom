@@ -16,7 +16,7 @@ export async function createCheckoutSession(
     console.error("User not found or no connected account ID");
     return [];
   }
-  console.log(priceId.priceId);
+
   const stripeSession = await stripe.checkout.sessions.create(
     {
       payment_method_types: ["card"],

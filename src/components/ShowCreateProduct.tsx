@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import CreateProduct from "./forms/CreateProduct";
+import CreateProduct from "@/components/forms/CreateProduct";
 
-function ShowCreateForm() {
+export default function ShowCreateForm() {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -25,5 +25,3 @@ function ShowCreateForm() {
     </>
   );
 }
-
-export default ShowCreateForm;

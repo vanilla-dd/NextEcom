@@ -19,6 +19,7 @@ import { createProductSchema } from "@/lib/helpers";
 import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
 import { cn } from "@/lib/utils";
 import FileUploader from "./file-uploader";
+import { createProduct } from "@/server/actions/stripe/createProduct";
 
 function CreateProduct() {
   const { setStep, getStep } = useCurrentFromStep();
@@ -38,6 +39,7 @@ function CreateProduct() {
       productFeatures: [{ value: "" }],
       productType: "redeem",
       redeemCodeUrl: "",
+      price: 1,
     },
     mode: "all",
   });
@@ -48,10 +50,9 @@ function CreateProduct() {
   });
 
   // Define a submit handler.
-  function onSubmit(values: z.infer<typeof createProductSchema>) {
+  async function onSubmit(values: z.infer<typeof createProductSchema>) {
     // Do something with the form values.
-    // await createProduct(values);
-    console.log(values);
+    await createProduct(values);
   }
 
   const handleFileUpload = (uploadedUrl: string, fileName: string) => {

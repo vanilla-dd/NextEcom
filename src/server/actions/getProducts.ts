@@ -1,13 +1,13 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
-import { productDetails, productStripeDetail, users } from "../db/schema";
+import { productStripeDetails, products } from "../db/schema";
 
 export async function getProduct() {
   return await db
     .select()
-    .from(productDetails)
+    .from(products)
     .fullJoin(
-      productStripeDetail,
-      eq(productDetails.id, productStripeDetail.productDetailsId),
+      productStripeDetails,
+      eq(products.id, productStripeDetails.productId),
     );
 }

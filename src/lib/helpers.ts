@@ -84,6 +84,7 @@ export const createProductSchema = z.object({
     .array(z.object({ value: z.string() }).optional())
     .min(1, { message: "At least one feature is needed" }),
   redeemCodeUrl: z.string().url().optional(),
+  price: z.number().min(1).max(10000),
 });
 
 export function accountLink() {

@@ -8,7 +8,6 @@ import React from "react";
 async function page() {
   const user = await auth();
 
-  console.log(user);
   return (
     <ContentLayout title={"Account"}>
       <ConnectStripe />

@@ -5,23 +5,29 @@ import {
   primaryKey,
   integer,
   pgEnum,
+  numeric,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
-export const RoleEnum = pgEnum("roles", ["user", "seller"]);
+export const RoleEnum = pgEnum("role", ["seller", "user", "admin"]);
+export const productTypeEnum = pgEnum("productType", [
+  "recurring",
+  "digital",
+  "redeem",
+]);
 
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   password: text("password"),
-  role: RoleEnum("roles").default("user"),
+  role: RoleEnum("role").default("user"),
   stripeId: text("stripeId").unique(),
-  connectId: text("connectId"),
+  connectId: text("connectId").unique(),
 });
 
 export const accounts = pgTable(
@@ -70,32 +76,57 @@ export const verificationTokens = pgTable(
   }),
 );
 
-export const productDetails = pgTable("productDetails", {
+export const products = pgTable("products", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  productTitle: text("productTitle").notNull().unique(),
-  productDescription: text("productDescription").notNull(),
-  productURL: text("productURL").notNull(),
-  productImgURL: text("productImgURL"),
-  productSupportEmail: text("productSupportEmail").notNull(),
+  title: text("title").notNull().unique(),
+  description: text("description").notNull(),
+  url: text("url").notNull(),
+  imageUrl: text("image_url"),
+  supportEmail: text("support_email").notNull(),
+  // category: text("category"),
+  // tags: text("tags"),
+  inventory: integer("inventory").default(0),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  stripeConnectId: text("stripe_connect_id").notNull(),
+  currency: text("currency").default("USD"),
+  type: productTypeEnum("type").default("redeem"),
+  csvUrl: text("csvUrl").unique(),
+  // discount: numeric("discount", { precision: 5, scale: 2 }).default(0),
   userId: text("userId")
     .notNull()
-    .unique()
     .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const productStripeDetail = pgTable("productStripeDetail", {
+export const productStripeDetails = pgTable("product_stripe_details", {
   id: text("id")
     .primaryKey()
-    .$default(() => crypto.randomUUID()),
-  productStripeName: text("productStripeName"),
-  productStripeId: text("productStripeId").notNull(),
-  productStripeDescription: text("productStripeDescription").notNull(),
-  prodcutDefaultPrice: text("productDefaultPrice").notNull(),
-  createdAt: text("createdAt"),
-  productStripeImgURL: text("productStripeImgURL"),
-  productDetailsId: text("productDetailsId")
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+  stripeId: text("stripe_id").notNull(),
+  description: text("description").notNull(),
+  defaultPrice: text("defaultPrice").notNull().unique(),
+  imageUrl: text("image_url"),
+  productId: text("product_id")
     .notNull()
-    .references(() => productDetails.id, { onDelete: "cascade" }),
+    .references(() => products.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const orders = pgTable("orders", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  stripeId: text("stripe_id").notNull(),
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
