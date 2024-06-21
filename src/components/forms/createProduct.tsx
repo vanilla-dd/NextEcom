@@ -19,9 +19,9 @@ import { createProductSchema } from "@/lib/helpers";
 import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
 import { cn } from "@/lib/utils";
 import FileUploader from "./file-uploader";
-import { createProduct } from "@/server/actions/stripe/createProduct";
+import { createProductAction } from "@/server/actions/stripe/createProduct";
 
-function CreateProduct() {
+export function CreateProduct() {
   const { setStep, getStep } = useCurrentFromStep();
   const [codeFileName, setCodeFileName] = useState("");
 
@@ -52,7 +52,7 @@ function CreateProduct() {
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof createProductSchema>) {
     // Do something with the form values.
-    await createProduct(values);
+    await createProductAction(values);
   }
 
   const handleFileUpload = (uploadedUrl: string, fileName: string) => {
@@ -281,5 +281,3 @@ function CreateProduct() {
     </Form>
   );
 }
-
-export default CreateProduct;

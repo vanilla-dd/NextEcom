@@ -88,7 +88,7 @@ export const products = pgTable("products", {
   // category: text("category"),
   // tags: text("tags"),
   inventory: integer("inventory").default(0),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  price: integer("price").notNull(),
   stripeConnectId: text("stripe_connect_id").notNull(),
   currency: text("currency").default("USD"),
   type: productTypeEnum("type").default("redeem"),
@@ -106,8 +106,8 @@ export const productStripeDetails = pgTable("product_stripe_details", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   stripeId: text("stripe_id").notNull(),
-  description: text("description").notNull(),
-  defaultPrice: text("defaultPrice").notNull().unique(),
+  description: text("description"),
+  defaultPrice: text("defaultPrice").notNull(),
   imageUrl: text("image_url"),
   productId: text("product_id")
     .notNull()

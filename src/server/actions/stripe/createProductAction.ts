@@ -8,7 +8,7 @@ import { stripe } from "@/server/stripe";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-export const createProduct = async (
+export const createProductAction = async (
   values: z.infer<typeof createProductSchema>,
 ) => {
   const session = await auth();
@@ -57,7 +57,7 @@ export const createProduct = async (
 
   if (!product || !product.default_price) return;
   await db.insert(productStripeDetails).values({
-    defaultPrice: product.default_price,
+    defaultPrice: product.default_price.toString(),
     description: product.description,
     stripeId: product.id,
     imageUrl: "",

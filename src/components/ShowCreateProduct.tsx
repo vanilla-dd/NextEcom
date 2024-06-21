@@ -1,9 +1,10 @@
 "use client";
+
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import CreateProduct from "@/components/forms/CreateProduct";
+import { CreateProduct } from "./forms/CreateProduct";
 
-export default function ShowCreateForm() {
+export function ShowCreateForm() {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -12,7 +13,7 @@ export default function ShowCreateForm() {
           <div>
             <h1 className="text-xl font-semibold">Add Product</h1>
             <p className="text-sm font-light">
-              Fill the form to add an product to sell
+              Fill the form to add a product to sell
             </p>
           </div>
           <Button className="w-full" onClick={() => setOpen(!open)}>

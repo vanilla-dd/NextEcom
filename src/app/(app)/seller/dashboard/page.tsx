@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import ShowCreateForm from "@/components/ShowCreateProduct";
+import { ShowCreateForm } from "@/components/ShowCreateProduct";
 import { ContentLayout } from "@/components/dashboard/content-layout";
 import { linkAccount } from "@/server/actions/stripe/linkAccount";
 import { redirect } from "next/navigation";
