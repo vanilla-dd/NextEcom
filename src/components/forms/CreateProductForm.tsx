@@ -18,8 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductSchema } from "@/lib/helpers";
 import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
 import { cn } from "@/lib/utils";
+import { createProductAction } from "@/server/actions/stripe/createProductAction";
 import FileUploader from "./file-uploader";
-import { createProductAction } from "@/server/actions/stripe/createProduct";
 
 export function CreateProduct() {
   const { setStep, getStep } = useCurrentFromStep();

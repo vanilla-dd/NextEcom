@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { CreateProduct } from "./forms/CreateProduct";
+import { CreateProduct } from "./forms/CreateProductForm";
 
 export function ShowCreateForm() {
   const [open, setOpen] = useState(false);
