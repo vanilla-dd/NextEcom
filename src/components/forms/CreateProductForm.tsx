@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createProductSchema } from "@/lib/helpers";
+import { createProductSchema, generateSlug } from "@/lib/helpers";
 import { useCurrentFromStep } from "@/hooks/useCurrentFromStep";
 import { cn } from "@/lib/utils";
 import { createProductAction } from "@/server/actions/stripe/createProductAction";
@@ -38,6 +38,7 @@ export function CreateProduct() {
       productType: "redeem",
       redeemCodeUrl: "",
       price: 1,
+      namedUrl: "",
     },
     mode: "all",
   });
@@ -48,7 +49,9 @@ export function CreateProduct() {
   });
 
   async function onSubmit(values: z.infer<typeof createProductSchema>) {
-    await createProductAction(values);
+    const namedUrl = generateSlug(values.productName);
+
+    await createProductAction(values, namedUrl);
   }
 
   const handleFileUpload = (uploadedUrl: string, fileName: string) => {

@@ -18,6 +18,7 @@ export default function FileUploader({
         }}
         onUploadError={(error: Error) => {
           alert(`ERROR! ${error.message}`);
+          console.log(error);
         }}
       />
     </main>

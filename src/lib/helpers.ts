@@ -89,6 +89,7 @@ export const createProductSchema = z.object({
     .min(1)
     .max(10000)
     .transform((ctx) => parseInt(ctx)),
+  namedUrl: z.string().optional(),
 });
 
 export function accountLink() {
@@ -388,3 +389,19 @@ import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 export const UploadButton = generateUploadButton<OurFileRouter>();
 export const UploadDropzone = generateUploadDropzone<OurFileRouter>();
+
+export function generateSlug(name: string, maxLength: number = 20): string {
+  let slug = name
+    .normalize("NFKD") // Normalize to NFKD form
+    .replace(/[\u0300-\u036F]/g, "") // Remove diacritics
+    .toLowerCase() // Convert to lowercase
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
+    .replace(/^-+|-+$/g, ""); // Remove leading and trailing hyphens
+
+  // Truncate the slug to the specified max length
+  if (slug.length > maxLength) {
+    slug = slug.substring(0, maxLength).replace(/-+$/g, ""); // Remove trailing hyphens after truncation
+  }
+
+  return slug;
+}

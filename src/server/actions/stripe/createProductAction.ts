@@ -10,6 +10,7 @@ import { z } from "zod";
 
 export const createProductAction = async (
   values: z.infer<typeof createProductSchema>,
+  namedUrl: string,
 ) => {
   const session = await auth();
   if (!session || !session.user?.id) return;
@@ -31,12 +32,13 @@ export const createProductAction = async (
       stripeConnectId: getStripeId.connectId,
       name: values.productName,
       type: "redeem",
+      namedUrl: namedUrl,
       inventory: 100, // Todo: make dynamic
       imageUrl: values.productFeaturedImage,
       csvUrl: values.redeemCodeUrl,
       supportEmail: values.supportEmail,
       userId: session.user.id,
-      url: values.websiteURL,
+      websiteUrl: values.websiteURL,
       currency: sellerDetails.available[0].currency,
       price: values.price,
     })
