@@ -29,9 +29,9 @@ export const createProductAction = async (
     .values({
       description: values.productPitch,
       stripeConnectId: getStripeId.connectId,
-      title: values.productName,
+      name: values.productName,
       type: "redeem",
-      inventory: 100,
+      inventory: 100, // Todo: make dynamic
       imageUrl: values.productFeaturedImage,
       csvUrl: values.redeemCodeUrl,
       supportEmail: values.supportEmail,

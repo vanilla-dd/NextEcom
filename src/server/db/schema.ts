@@ -80,7 +80,7 @@ export const products = pgTable("products", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  title: text("title").notNull().unique(),
+  name: text("name").notNull().unique(),
   description: text("description").notNull(),
   url: text("url").notNull(),
   imageUrl: text("image_url"),

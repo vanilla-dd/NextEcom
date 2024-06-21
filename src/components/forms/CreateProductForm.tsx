@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -49,9 +47,7 @@ export function CreateProduct() {
     name: "productFeatures",
   });
 
-  // Define a submit handler.
   async function onSubmit(values: z.infer<typeof createProductSchema>) {
-    // Do something with the form values.
     await createProductAction(values);
   }
 
@@ -82,7 +78,9 @@ export function CreateProduct() {
                           headers: {
                             "Content-Type": "application/json",
                           },
-                          body: JSON.stringify({ url: e.currentTarget.value }),
+                          body: JSON.stringify({
+                            url: e.currentTarget.value,
+                          }),
                         });
 
                         if (!response.ok) {
@@ -163,8 +161,66 @@ export function CreateProduct() {
             />
           </>
         ) : (
-          <>
+          <div>
             {/* Step two */}
+            <FormField
+              control={form.control}
+              name="redeemCodeUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Upload redeem codes (.csv file)
+                  </FormLabel>
+                  <FormControl>
+                    <>
+                      <Input
+                        hidden
+                        disabled
+                        className="invisible hidden opacity-0"
+                        placeholder="help.sprout@gmail.com"
+                        {...field}
+                      />
+                      {form.getValues("redeemCodeUrl") ? (
+                        <div>
+                          <p>{codeFileName}</p>
+                          <Button
+                            onClick={() => {
+                              form.setValue("redeemCodeUrl", "");
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <FileUploader onUpload={handleFileUpload} />
+                      )}
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    Product Price
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="1.00"
+                      {...field}
+                      type="number"
+                      inputMode="numeric"
+                    />
+                  </FormControl>
+                  <FormDescription>This is your product price.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {fields.map((item, index) => (
               <FormField
                 key={item.id}
@@ -208,44 +264,7 @@ export function CreateProduct() {
                 Add Feature
               </Button>
             </div>
-            <FormField
-              control={form.control}
-              name="redeemCodeUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base font-semibold">
-                    Upload redeem codes (.csv file)
-                  </FormLabel>
-                  <FormControl>
-                    <>
-                      <Input
-                        hidden
-                        disabled
-                        className="invisible hidden opacity-0"
-                        placeholder="help.sprout@gmail.com"
-                        {...field}
-                      />
-                      {form.getValues("redeemCodeUrl") ? (
-                        <div>
-                          <p>{codeFileName}</p>
-                          <Button
-                            onClick={() => {
-                              form.setValue("redeemCodeUrl", "");
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      ) : (
-                        <FileUploader onUpload={handleFileUpload} />
-                      )}
-                    </>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
+          </div>
         )}
         <div className="flex justify-between">
           <Button
