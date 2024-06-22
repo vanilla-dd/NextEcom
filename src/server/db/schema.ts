@@ -131,3 +131,31 @@ export const orders = pgTable("orders", {
   status: text("status").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const productClicks = pgTable("product_clicks", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+  clickCount: integer("click_count").default(1),
+  clickedAt: timestamp("clicked_at").defaultNow(),
+  totalClicked: integer("total_clicked").default(0),
+});
+
+// New Table for Order Analytics
+export const orderAnalytics = pgTable("order_analytics", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  totalRevenue: integer("total_revenue").default(0),
+  totalOrders: integer("total_orders").default(0),
+  lastOrderAt: timestamp("last_order_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+});

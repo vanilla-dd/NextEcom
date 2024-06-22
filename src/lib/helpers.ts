@@ -281,6 +281,7 @@ export const getFormattedCurr = (
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currencyCode,
+    maximumFractionDigits: 0,
   });
   return formatter.format(amount);
 };

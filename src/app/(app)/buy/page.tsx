@@ -15,21 +15,25 @@ async function page() {
           <Link
             href={`/buy/${product.namedUrl}`}
             key={product.id}
-            className="border px-2 py-4"
+            className="flex max-w-[30ch] flex-col items-center justify-center border px-2 py-4 text-center"
           >
             <img
               src={product.imageUrl ? product.imageUrl : ""}
               alt="Product Logo"
-              width={100}
-              height={100}
+              className="aspect-video h-32 w-full rounded-md object-cover"
             />
-            <p>{product.name}</p>
-            <p>{product.description}</p>
+            <p className="text-3xl font-bold">{product.name}</p>
+            <p className="text-sm">{product.description}</p>
+            <p>tags?</p>
             <p>
               {getFormattedCurr(product.currency?.toUpperCase(), product.price)}
+              /
+              {product.type === "redeem" || product.type === "digital"
+                ? "Lifetime"
+                : "Subscription"}
             </p>
-            <p>{product.inventory}</p>
-            <p>{product.type}</p>
+            <p>Reviews?</p>
+            <p>{product.inventory} to show or hide</p>
           </Link>
         );
       })}
