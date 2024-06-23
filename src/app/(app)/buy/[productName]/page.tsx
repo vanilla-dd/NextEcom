@@ -31,6 +31,7 @@ export default async function Page({
           currency: extendedProductDetail.product.currency ?? "usd",
           priceId: extendedProductDetail.productStripeDetails?.defaultPrice!,
           price: extendedProductDetail.product.price,
+          productNamedUrl: extendedProductDetail.product.namedUrl,
         }}
       >
         Hleo

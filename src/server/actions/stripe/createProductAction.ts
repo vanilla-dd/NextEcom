@@ -25,6 +25,17 @@ export const createProductAction = async (
     stripeAccount: getStripeId.connectId,
   });
 
+  if (!values.redeemCodeUrl) return;
+  const response = await fetch(values.redeemCodeUrl);
+  const text = await response.text();
+  if (!text) return;
+  async function parsedCsv() {
+    const rows = text.split("\n");
+    const parsedCsv = rows.map((row) => row.split(","));
+    return parsedCsv.length;
+  }
+  const redeemCodeLength = await parsedCsv();
+
   const productInfo = await db
     .insert(products)
     .values({
@@ -33,7 +44,7 @@ export const createProductAction = async (
       name: values.productName,
       type: "redeem",
       namedUrl: namedUrl,
-      inventory: 100, // Todo: make dynamic
+      inventory: redeemCodeLength,
       imageUrl: values.productFeaturedImage,
       csvUrl: values.redeemCodeUrl,
       supportEmail: values.supportEmail,
@@ -41,6 +52,7 @@ export const createProductAction = async (
       websiteUrl: values.websiteURL,
       currency: sellerDetails.available[0].currency,
       price: values.price,
+      usedCodes: 0,
     })
     .returning();
 

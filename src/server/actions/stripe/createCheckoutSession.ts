@@ -8,6 +8,7 @@ interface CheckoutSessionParams {
   connectedId: string;
   priceId: string;
   price: number;
+  productNamedUrl: string;
 }
 
 export const createCheckoutSession = async ({
@@ -15,6 +16,7 @@ export const createCheckoutSession = async ({
   connectedId,
   priceId,
   price,
+  productNamedUrl,
 }: CheckoutSessionParams) => {
   try {
     const session = await auth();
@@ -27,7 +29,7 @@ export const createCheckoutSession = async ({
     const checkoutSession = await stripe.checkout.sessions.create(
       {
         currency: currency,
-        success_url: `${process.env.BASE_URL}/success`,
+        success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&product=${productNamedUrl}`,
         allow_promotion_codes: true,
         customer_email: session.user.email!,
         line_items: [{ price: priceId, quantity: 1 }],

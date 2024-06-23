@@ -9,6 +9,7 @@ interface CheckoutSessionParams {
   connectedId: string;
   priceId: string;
   price: number;
+  productNamedUrl: string;
 }
 
 function BuyButton({
@@ -26,6 +27,7 @@ function BuyButton({
           connectedId: checkoutSessionParams.connectedId,
           priceId: checkoutSessionParams.priceId,
           price: checkoutSessionParams.price,
+          productNamedUrl: checkoutSessionParams.productNamedUrl,
         });
         console.log(url);
       }}

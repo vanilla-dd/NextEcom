@@ -89,6 +89,7 @@ export const products = pgTable("products", {
   // category: text("category"),
   // tags: text("tags"),
   inventory: integer("inventory").default(0),
+  usedCodes: integer("used_codes").default(-1),
   price: integer("price").notNull(),
   stripeConnectId: text("stripe_connect_id").notNull(),
   currency: text("currency").default("USD"),
@@ -126,9 +127,12 @@ export const orders = pgTable("orders", {
   productId: text("product_id")
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
-  stripeId: text("stripe_id").notNull(),
-  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  stripeId: text("stripe_id"),
+  price: integer("price").notNull(),
+  currency: text("currency").default("usd"),
+  redeemCode: text("redeem_code").notNull(),
   status: text("status").notNull(),
+  sessionId: text("session_id").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -155,7 +159,7 @@ export const orderAnalytics = pgTable("order_analytics", {
     .references(() => products.id, { onDelete: "cascade" }),
   totalRevenue: integer("total_revenue").default(0),
   totalOrders: integer("total_orders").default(0),
-  lastOrderAt: timestamp("last_order_at"),
+  lastOrderAt: timestamp("last_order_at").$onUpdate(() => new Date()),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
