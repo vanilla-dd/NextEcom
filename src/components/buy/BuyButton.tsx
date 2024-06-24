@@ -29,7 +29,7 @@ function BuyButton({
           price: checkoutSessionParams.price,
           productNamedUrl: checkoutSessionParams.productNamedUrl,
         });
-        console.log(url);
+        // console.log(url); Todo: make redirect
       }}
     >
       {children}

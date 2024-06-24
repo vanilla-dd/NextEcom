@@ -4,9 +4,9 @@ import { auth } from "@/auth";
 import Failure from "@/components/purchase/Failure";
 import Success from "@/components/purchase/Success";
 import { db } from "@/server/db";
-import { orders, products } from "@/server/db/schema";
+import { orderAnalytics, orders, products } from "@/server/db/schema";
 import { stripe } from "@/server/stripe";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import React from "react";
 
 async function authenticateUser() {
@@ -97,6 +97,32 @@ async function updateProductUsage(product: any) {
     .where(eq(products.namedUrl, product.namedUrl));
 }
 
+async function updateAnalytics(product: any) {
+  const now = new Date();
+
+  try {
+    await db
+      .insert(orderAnalytics)
+      .values({
+        productId: product.id,
+        lastOrderAt: now,
+        totalOrders: 1,
+        totalRevenue: product.price,
+      })
+      .onConflictDoUpdate({
+        target: orderAnalytics.productId,
+        set: {
+          lastOrderAt: now,
+          totalOrders: sql`${orderAnalytics.totalOrders} + 1`,
+          totalRevenue: sql`${orderAnalytics.totalRevenue} + ${product.price}`,
+        },
+      });
+  } catch (error: any) {
+    console.error("Error updating analytics:", error.message);
+    throw new Error("Failed to update analytics");
+  }
+}
+
 async function page({
   searchParams,
 }: {
@@ -119,6 +145,7 @@ async function page({
     const redeemCode = await fetchRedeemCode(product);
     await insertOrder(product, session, user, redeemCode);
     await updateProductUsage(product);
+    await updateAnalytics(product);
 
     return <Success redeemCode={redeemCode} />;
   } catch (error: any) {

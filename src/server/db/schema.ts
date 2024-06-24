@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   numeric,
+  unique,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
@@ -150,16 +151,24 @@ export const productClicks = pgTable("product_clicks", {
 });
 
 // New Table for Order Analytics
-export const orderAnalytics = pgTable("order_analytics", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  productId: text("product_id")
-    .notNull()
-    .references(() => products.id, { onDelete: "cascade" }),
-  totalRevenue: integer("total_revenue").default(0),
-  totalOrders: integer("total_orders").default(0),
-  lastOrderAt: timestamp("last_order_at").$onUpdate(() => new Date()),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-});
+export const orderAnalytics = pgTable(
+  "order_analytics",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    productId: text("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    totalRevenue: integer("total_revenue").default(0),
+    totalOrders: integer("total_orders").default(0),
+    lastOrderAt: timestamp("last_order_at").$onUpdate(() => new Date()),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  },
+  (table) => {
+    return {
+      uniqueProduct: unique().on(table.productId),
+    };
+  },
+);
