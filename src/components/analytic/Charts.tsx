@@ -6,10 +6,10 @@ import {
   AreaChart,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Area,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 
 const Charts = () => {
@@ -17,90 +17,55 @@ const Charts = () => {
   if (!mounted) return null;
 
   const data = [
-    {
-      name: "helo",
-      revenue: 200,
-    },
-    {
-      name: "helo",
-      revenue: 210,
-    },
-    {
-      name: "helo",
-      revenue: 290,
-    },
-    {
-      name: "helo",
-      revenue: 200,
-    },
-    {
-      name: "helo",
-      revenue: 181,
-    },
-    {
-      name: "helo",
-      revenue: 900,
-    },
-    {
-      name: "helo",
-      revenue: 700,
-    },
-    {
-      name: "helo",
-      revenue: 200,
-    },
-    {
-      name: "helo",
-      revenue: 281,
-    },
-    {
-      name: "helo",
-      revenue: 500,
-    },
-    {
-      name: "helo",
-      revenue: 100,
-    },
+    { date: "2024-06-01", revenue: 0 },
+    { date: "2024-06-02", revenue: 5 },
+    { date: "2024-06-03", revenue: 9 },
+    { date: "2024-06-04", revenue: 8 },
+    { date: "2024-06-05", revenue: 1 },
+    { date: "2024-06-06", revenue: 9 },
+    { date: "2024-06-07", revenue: 6 },
+    { date: "2024-06-08", revenue: 8 },
+    { date: "2024-06-09", revenue: 4 },
+    { date: "2024-06-10", revenue: 2 },
+    { date: "2024-06-24", revenue: 5, predicted: 5 },
+    { date: "2024-06-25", predicted: 10 },
+    { date: "2024-06-26", predicted: 5 },
+    { date: "2024-06-27", predicted: 1 },
+    { date: "2024-06-28", predicted: 6 },
+    { date: "2024-06-29", predicted: 3 },
+    { date: "2024-06-30", predicted: 9 },
   ];
 
   return (
-    <ResponsiveContainer
-      maxHeight={50}
-      height={50}
-      // width={400}
-      className={"max-w-80"}
-    >
-      <AreaChart
-        width={300}
-        height={50}
-        data={data}
-        margin={{
-          top: 10,
-          right: 30,
-          left: 0,
-          bottom: 0,
-        }}
-      >
+    <ResponsiveContainer className="max-w-80" height={40}>
+      <AreaChart data={data}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid
-          strokeDasharray="3 0"
-          vertical={false}
-          horizontal={false}
-        />
-        <XAxis dataKey="name" hide={true} />
-        {/* <YAxis /> */}
-        <Tooltip wrapperClassName="" labelClassName="" />
+        <Tooltip />
+
         <Area
-          type="basis"
+          type="monotone"
           dataKey="revenue"
-          stroke="#06b6d4"
+          stroke="#8884d8"
           fillOpacity={1}
           fill="url(#colorUv)"
+        />
+
+        <Area
+          type="monotone"
+          dataKey="predicted"
+          stroke="#8884ff"
+          fillOpacity={1}
+          strokeDasharray="1 3"
+          fill="transparent"
         />
       </AreaChart>
     </ResponsiveContainer>
