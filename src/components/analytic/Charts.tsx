@@ -2,40 +2,88 @@
 
 import { useMounted } from "@/hooks/useMounted";
 import React from "react";
-import {
-  AreaChart,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Area,
-  ResponsiveContainer,
-  ReferenceLine,
-} from "recharts";
+import { AreaChart, Tooltip, Area, ResponsiveContainer } from "recharts";
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-const Charts = () => {
+type AnalyticsData = {
+  date: string;
+  revenue?: number;
+  predicted?: number;
+};
+const Charts: React.FC<{ analytics: AnalyticsData[] }> = ({ analytics }) => {
   const mounted = useMounted();
   if (!mounted) return null;
+  dayjs.extend(isSameOrBefore);
+  interface AnalyticsData {
+    date: string;
+    revenue?: number;
+    predicted?: number | null;
+  }
 
-  const data = [
-    { date: "2024-06-01", revenue: 0 },
-    { date: "2024-06-02", revenue: 5 },
-    { date: "2024-06-03", revenue: 9 },
-    { date: "2024-06-04", revenue: 8 },
-    { date: "2024-06-05", revenue: 1 },
-    { date: "2024-06-06", revenue: 9 },
-    { date: "2024-06-07", revenue: 6 },
-    { date: "2024-06-08", revenue: 8 },
-    { date: "2024-06-09", revenue: 4 },
-    { date: "2024-06-10", revenue: 2 },
-    { date: "2024-06-24", revenue: 5, predicted: 5 },
-    { date: "2024-06-25", predicted: 10 },
-    { date: "2024-06-26", predicted: 5 },
-    { date: "2024-06-27", predicted: 1 },
-    { date: "2024-06-28", predicted: 6 },
-    { date: "2024-06-29", predicted: 3 },
-    { date: "2024-06-30", predicted: 9 },
-  ];
+  const transformData = (data: AnalyticsData[]) => {
+    const transformedData: AnalyticsData[] = [];
+    const currentDate = dayjs();
+    const lastDayOfMonth = currentDate.endOf("month");
+    let currentDay = currentDate.startOf("month");
 
+    while (currentDay.isSameOrBefore(lastDayOfMonth, "day")) {
+      const dateStr = currentDay.format("YYYY-MM-DD");
+
+      // Find the corresponding record in data
+      const record = data.find((item) => item.date === dateStr);
+
+      if (record) {
+        // If there is a record for the current day, push it to transformedData
+        transformedData.push({
+          date: dateStr,
+          revenue: record.revenue || 0,
+          predicted: null, // Initialize predicted as null by default
+        });
+      } else {
+        // If no record is found, create a new entry with predicted revenue
+        const predicted = findPredictedRevenue(data, dateStr);
+        transformedData.push({
+          date: dateStr,
+          revenue: 0,
+          predicted: predicted !== undefined ? predicted : null,
+        });
+      }
+
+      // Move to the next day
+      currentDay = currentDay.add(1, "day");
+    }
+
+    // Calculate predictions for future days based on previous revenue
+    for (let i = 1; i < transformedData.length; i++) {
+      if (transformedData[i].predicted === null) {
+        transformedData[i].predicted = transformedData[i - 1].revenue || 0;
+      }
+    }
+
+    return transformedData;
+  };
+
+  // Helper function to find predicted revenue based on the last available revenue
+  const findPredictedRevenue = (
+    data: AnalyticsData[],
+    currentDate: string,
+  ): number | undefined => {
+    const currentIndex = data.findIndex((item) => item.date === currentDate);
+    if (currentIndex === -1) return undefined;
+
+    // Find the last available revenue
+    for (let i = currentIndex - 1; i >= 0; i--) {
+      if (data[i].revenue !== undefined) {
+        return data[i].revenue;
+      }
+    }
+
+    return undefined; // No prediction found
+  };
+
+  const data = transformData(analytics);
+  console.log(data);
   return (
     <ResponsiveContainer className="max-w-80" height={40}>
       <AreaChart data={data}>

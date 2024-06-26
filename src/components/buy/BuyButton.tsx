@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { createCheckoutSession } from "@/server/actions/stripe/createCheckoutSession";
+import { redirect } from "next/navigation";
 
 interface CheckoutSessionParams {
   currency: string;
@@ -29,7 +30,7 @@ function BuyButton({
           price: checkoutSessionParams.price,
           productNamedUrl: checkoutSessionParams.productNamedUrl,
         });
-        // console.log(url); Todo: make redirect
+        url && (window.location.href = url);
       }}
     >
       {children}

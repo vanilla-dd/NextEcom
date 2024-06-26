@@ -34,7 +34,7 @@ export default async function Page({
           productNamedUrl: extendedProductDetail.product.namedUrl,
         }}
       >
-        Hleo
+        Buy
       </BuyButton>
     </div>
   );

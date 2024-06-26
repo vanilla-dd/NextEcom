@@ -150,7 +150,6 @@ export const productClicks = pgTable("product_clicks", {
   totalClicked: integer("total_clicked").default(0),
 });
 
-// New Table for Order Analytics
 export const orderAnalytics = pgTable(
   "order_analytics",
   {
@@ -160,15 +159,18 @@ export const orderAnalytics = pgTable(
     productId: text("product_id")
       .notNull()
       .references(() => products.id, { onDelete: "cascade" }),
-    totalRevenue: integer("total_revenue").default(0),
-    totalOrders: integer("total_orders").default(0),
-    lastOrderAt: timestamp("last_order_at").$onUpdate(() => new Date()),
+    date: timestamp("date").notNull(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    revenue: integer("revenue").notNull(),
+    unitsSold: integer("units_sold").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
   },
   (table) => {
     return {
-      uniqueProduct: unique().on(table.productId),
+      uniqueOrder: unique().on(table.orderId),
     };
   },
 );

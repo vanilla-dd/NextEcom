@@ -87,7 +87,7 @@ async function insertOrder(
     currency: product.currency,
     redeemCode: redeemCode,
   };
-  await db.insert(orders).values(newOrder);
+  return await db.insert(orders).values(newOrder).returning();
 }
 
 async function updateProductUsage(product: any) {
@@ -97,26 +97,17 @@ async function updateProductUsage(product: any) {
     .where(eq(products.namedUrl, product.namedUrl));
 }
 
-async function updateAnalytics(product: any) {
+async function updateAnalytics(product: any, order: any) {
   const now = new Date();
 
   try {
-    await db
-      .insert(orderAnalytics)
-      .values({
-        productId: product.id,
-        lastOrderAt: now,
-        totalOrders: 1,
-        totalRevenue: product.price,
-      })
-      .onConflictDoUpdate({
-        target: orderAnalytics.productId,
-        set: {
-          lastOrderAt: now,
-          totalOrders: sql`${orderAnalytics.totalOrders} + 1`,
-          totalRevenue: sql`${orderAnalytics.totalRevenue} + ${product.price}`,
-        },
-      });
+    await db.insert(orderAnalytics).values({
+      date: now,
+      productId: product.id,
+      revenue: product.price,
+      unitsSold: 1,
+      orderId: order.id,
+    });
   } catch (error: any) {
     console.error("Error updating analytics:", error.message);
     throw new Error("Failed to update analytics");
@@ -143,9 +134,9 @@ async function page({
     }
 
     const redeemCode = await fetchRedeemCode(product);
-    await insertOrder(product, session, user, redeemCode);
+    const [order] = await insertOrder(product, session, user, redeemCode);
     await updateProductUsage(product);
-    await updateAnalytics(product);
+    await updateAnalytics(product, order);
 
     return <Success redeemCode={redeemCode} />;
   } catch (error: any) {
