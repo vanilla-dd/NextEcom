@@ -79,7 +79,7 @@ async function Navbar() {
             {isSeller ? (
               <LinkEffect link="/seller/dashboard">Seller Dashboard</LinkEffect>
             ) : (
-              <LinkEffect link="/seller">Become a seller</LinkEffect>
+              <LinkEffect link="/seller/dashboard">Become a seller</LinkEffect>
             )}
           </li>
           <hr className="h-4 w-[1px] bg-gray-400" />
